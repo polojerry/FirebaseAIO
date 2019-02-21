@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "386655445917",
+    "firebase_url": "https://fir-aio.firebaseio.com",
+    "project_id": "fir-aio",
+    "storage_bucket": "fir-aio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386655445917:android:d8200353dba61352",
+        "android_client_info": {
+          "package_name": "com.polotechnologies.firebaseaio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386655445917-as56kt9dc3h76qnhts5u8u6lcunsd9s5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polotechnologies.firebaseaio",
+            "certificate_hash": "de53f42454179cf227e2956cdc29c1e186b8d4e5"
+          }
+        },
+        {
+          "client_id": "386655445917-89rm9le4md7b1vof2mplte3qffuu83ke.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNw3K5h0YE7W6UnAG0_LMH2wC-ABqgwVE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386655445917-89rm9le4md7b1vof2mplte3qffuu83ke.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
