@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     public final int REQUEST_LOGIN = 1000;
+    boolean loginState = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +27,15 @@ public class LoginActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        signInIntent(providers);
-        finish();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+        if (mAuth.getCurrentUser() == null){
+            signInIntent(providers);
+        }else{
+            Intent startMainActivity  = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(startMainActivity);
+            finish();
+        }
 
     }
 
@@ -37,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setTheme(R.style.AppTheme)
                         .build(),
                 REQUEST_LOGIN);
 
@@ -50,8 +59,11 @@ public class LoginActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-
                 Toast.makeText(this, "Successfully Signed In", Toast.LENGTH_SHORT).show();
+
+                Intent startMainActivity = new Intent(this, MainActivity.class);
+                startActivity(startMainActivity);
+                finish();
 
 
             } else {
@@ -62,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+        finish();
     }
 
 

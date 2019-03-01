@@ -8,10 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!--- App Launcher/ Splash Screen Theme -->
-    <style name="AppTheme.launcherTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-
-        <item name="android:windowBackground">@drawable/launcher_background</item>
-
+    <!--Style for Splash Screen-->
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name ="android:windowBackground"> @drawable/launcher_background</item>
     </style>
+
+    <!-- Base application theme. -->
+    <style name="loginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
 </resources>
