@@ -24,7 +24,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.NewStorageActivity" />
-        <activity android:name=".ui.NewRealtimeActivity"></activity>
+        <activity android:name=".ui.NewRealtimeActivity" />
+        <activity android:name=".ui.NewFirestoreActivity"></activity>
     </application>
 
 </manifest>

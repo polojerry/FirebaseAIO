@@ -82,6 +82,13 @@ public class StorageFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getLatestData();
+    }
+
+
+    @Override
     public void onStart() {
         super.onStart();
         getLatestData();

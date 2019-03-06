@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
-        android:id="@+id/realTimeProgressBar"
+        android:id="@+id/newRealtimeProgressBar"
         android:layout_width="wrap_content"
         android:visibility="gone"
         android:layout_height="wrap_content"

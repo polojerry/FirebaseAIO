@@ -2,6 +2,7 @@ package com.polotechnologies.firebaseaio;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,7 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.polotechnologies.firebaseaio.fragments.FirecastFragment;
+import com.polotechnologies.firebaseaio.adapters.BottomNavigationBehaviour;
+import com.polotechnologies.firebaseaio.fragments.FirestoreFragment;
 import com.polotechnologies.firebaseaio.fragments.RealtimeFragment;
 import com.polotechnologies.firebaseaio.fragments.StorageFragment;
 
@@ -32,7 +34,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mBottomNavigationView = findViewById(R.id.mainBottNav);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
 
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBottomNavigationView.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehaviour());
+
+
         loadFragment(new StorageFragment());
+
 
     }
 
@@ -41,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Fragment fragment = null;
         switch (menuItem.getItemId()){
             case R.id.actionFirecast:
-                fragment = new FirecastFragment();
+                fragment = new FirestoreFragment();
                 break;
             case R.id.actionRealtime:
                 fragment = new RealtimeFragment();

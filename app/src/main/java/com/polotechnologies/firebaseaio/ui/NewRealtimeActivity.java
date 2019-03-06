@@ -66,7 +66,7 @@ public class NewRealtimeActivity extends AppCompatActivity {
         mImageName = findViewById(R.id.newRealTimeImageName);
         mSelectedImage = findViewById(R.id.newRealTimeImage);
         mUploadImage = findViewById(R.id.btnUploadRealTime);
-        realTimeProgressBar = findViewById(R.id.realTimeProgressBar);
+        realTimeProgressBar = findViewById(R.id.newRealtimeProgressBar);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference("FirebaseAIO/realTimeImages");
         mAuth = FirebaseAuth.getInstance();

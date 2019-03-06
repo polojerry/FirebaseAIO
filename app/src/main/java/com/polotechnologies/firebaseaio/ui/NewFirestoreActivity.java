@@ -24,13 +24,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.polotechnologies.firebaseaio.R;
-import com.polotechnologies.firebaseaio.data_models.StorageItems;
+import com.polotechnologies.firebaseaio.data_models.FirestoreItems;
+import com.polotechnologies.firebaseaio.data_models.RealtimeItems;
 
-public class NewStorageActivity extends AppCompatActivity {
+public class NewFirestoreActivity extends AppCompatActivity {
 
     //Integer variable for requesting image
     static final int REQUEST_IMAGE_GET = 1;
@@ -56,21 +60,23 @@ public class NewStorageActivity extends AppCompatActivity {
     ImageView mSelectedImage;
     Button mUploadImage;
 
-    ProgressBar storageProgressBar;
+    ProgressBar realTimeProgressBar;
 
+    FirebaseFirestore fireStoreDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_storage);
-        mSelectedImage = findViewById(R.id.newStorageImage);
-        mUploadImage = findViewById(R.id.btnUploadStorage);
-        storageProgressBar = findViewById(R.id.storageProgressBar);
+        setContentView(R.layout.activity_new_firestore);
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("FirebaseAIO/storageImages");
+        mImageName = findViewById(R.id.newFirestoreImageName);
+        mSelectedImage = findViewById(R.id.newFirestoreImage);
+        mUploadImage = findViewById(R.id.btnUploadFirestore);
+        realTimeProgressBar = findViewById(R.id.firestoreProgressBar);
+
         mAuth = FirebaseAuth.getInstance();
+        fireStoreDb = FirebaseFirestore.getInstance();
 
         mStorageReference = FirebaseStorage.getInstance().getReference();
-
         mSelectedImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,15 +88,16 @@ public class NewStorageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mUploadImage.setEnabled(false);
-                storageProgressBar.setVisibility(View.VISIBLE);
+                realTimeProgressBar.setVisibility(View.VISIBLE);
                 uploadImage();
             }
         });
-
     }
 
+
+
     /*
-        Method used to select image from Gallary
+        Method used to select image from Gallery
      */
     public void selectImage() {
         checkPermission();
@@ -106,7 +113,6 @@ public class NewStorageActivity extends AppCompatActivity {
          Method to check for permission to read External Storage
      */
     public void checkPermission() {
-        // Here, thisActivity is the culocationUrlrrent activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -118,8 +124,8 @@ public class NewStorageActivity extends AppCompatActivity {
     }
 
     /*
-        Overriding method to get the selected method using the REQUEST In
-     */
+       Overriding method to get the selected method using the REQUEST In
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
@@ -140,13 +146,11 @@ public class NewStorageActivity extends AppCompatActivity {
      */
     public void uploadImage() {
 
-        String mDownloadUrl;
         FirebaseUser mCurrentUser = mAuth.getCurrentUser();
         String userId = mCurrentUser.getUid();
+        String name = mImageName.getText().toString();
 
-        String id = mDatabaseReference.push().getKey();
-
-        final StorageReference storageReference = mStorageReference.child("storageImages/" + userId + "/" + id + ".png");
+        final StorageReference storageReference = mStorageReference.child("fireStoreImages/" + userId + "/" + name + ".png");
         storageReference.putFile(fullPhotoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -165,7 +169,7 @@ public class NewStorageActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(NewStorageActivity.this, "Failed to get Download Link" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NewFirestoreActivity.this, "Failed to get Download Link" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -175,30 +179,37 @@ public class NewStorageActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewStorageActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                realTimeProgressBar.setVisibility(View.GONE);
+                Toast.makeText(NewFirestoreActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
     private void uploadImageUrl(String downloadUrl) {
-        String id = mDatabaseReference.push().getKey();
-        StorageItems newImage = new StorageItems(downloadUrl);
+        String imageName = mImageName.getText().toString().trim();
 
-        mDatabaseReference.child(id).setValue(newImage).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirestoreItems firestoreItems = new FirestoreItems(imageName,downloadUrl);
+
+
+        CollectionReference collectionReference = fireStoreDb.collection("fireStoreImages");
+        collectionReference.add(firestoreItems).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                storageProgressBar.setVisibility(View.GONE);
-                Toast.makeText(NewStorageActivity.this, "Success Uploaded Image", Toast.LENGTH_SHORT).show();
+            public void onSuccess(DocumentReference documentReference) {
+                realTimeProgressBar.setVisibility(View.GONE);
+                Toast.makeText(NewFirestoreActivity.this, "Success Uploaded Image", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewStorageActivity.this, "Failed to Upload Image", Toast.LENGTH_SHORT).show();
+                realTimeProgressBar.setVisibility(View.GONE);
+                Toast.makeText(NewFirestoreActivity.this, "Failed to Upload Image URL", Toast.LENGTH_SHORT).show();
             }
         });
+        
 
     }
+
 
 }
