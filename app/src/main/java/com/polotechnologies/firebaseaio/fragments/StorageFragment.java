@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.polotechnologies.firebaseaio.R;
 import com.polotechnologies.firebaseaio.adapters.StorageRecyclerAdapter;
@@ -36,7 +37,9 @@ public class StorageFragment extends Fragment {
     RecyclerView storageRecyclerView;
     StorageRecyclerAdapter storageRecyclerAdapter;
     List<StorageItems> mStorageItems;
+
     DatabaseReference mDatabaseReference;
+    Query query;
 
     FloatingActionButton newStorage;
 
@@ -63,12 +66,28 @@ public class StorageFragment extends Fragment {
         newStorage = getActivity().findViewById(R.id.fabNewStorage);
         storageRecyclerView = getActivity().findViewById(R.id.storageRecycler);
 
+        getActivity().setTitle("Cloud Storage");
+
         storageRecyclerView.setHasFixedSize(false);
         storageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         mStorageItems = new ArrayList<>();
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("FirebaseAIO/storageImages");
-        getLatestData();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        getLatestData(new StorageFragment.OnDataReceiveCallback(){
+            @Override
+            public void onDataReceived(DataSnapshot mDataSnapshot) {
+                mStorageItems.clear();
+                for (DataSnapshot storedDataSnapshot : mDataSnapshot.getChildren()){
+                    StorageItems latestStoredItems = storedDataSnapshot.getValue(StorageItems.class);;
+
+                    mStorageItems.add(latestStoredItems);
+                }
+
+                storageRecyclerAdapter = new StorageRecyclerAdapter(mContext,mStorageItems);
+                storageRecyclerView.setAdapter(storageRecyclerAdapter);
+            }
+
+        });
 
 
         newStorage.setOnClickListener(new View.OnClickListener() {
@@ -81,23 +100,57 @@ public class StorageFragment extends Fragment {
 
     }
 
+    public interface OnDataReceiveCallback {
+        void onDataReceived(DataSnapshot mDataSnapshot);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        getLatestData();
-
-    }
-
-    public void getLatestData(){
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        getLatestData(new StorageFragment.OnDataReceiveCallback(){
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataReceived(DataSnapshot mDataSnapshot) {
                 mStorageItems.clear();
-                for (DataSnapshot storageDataSnapshot : dataSnapshot.getChildren()){
-                    StorageItems latestStoredItems = storageDataSnapshot.getValue(StorageItems.class);
+                for (DataSnapshot storedDataSnapshot : mDataSnapshot.getChildren()){
+                    StorageItems latestStoredItems = storedDataSnapshot.getValue(StorageItems.class);;
 
                     mStorageItems.add(latestStoredItems);
                 }
+
+                storageRecyclerAdapter = new StorageRecyclerAdapter(mContext,mStorageItems);
+                storageRecyclerView.setAdapter(storageRecyclerAdapter);
+            }
+
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLatestData(new StorageFragment.OnDataReceiveCallback(){
+            @Override
+            public void onDataReceived(DataSnapshot mDataSnapshot) {
+                mStorageItems.clear();
+                for (DataSnapshot storedDataSnapshot : mDataSnapshot.getChildren()){
+                    StorageItems latestStoredItems = storedDataSnapshot.getValue(StorageItems.class);;
+
+                    mStorageItems.add(latestStoredItems);
+                }
+
+                storageRecyclerAdapter = new StorageRecyclerAdapter(mContext,mStorageItems);
+                storageRecyclerView.setAdapter(storageRecyclerAdapter);
+            }
+
+        });
+    }
+
+    private void getLatestData(final StorageFragment.OnDataReceiveCallback callback) {
+
+        query = mDatabaseReference.child("FirebaseAIO/storageImages");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                callback.onDataReceived(dataSnapshot);
             }
 
             @Override
@@ -105,8 +158,5 @@ public class StorageFragment extends Fragment {
 
             }
         });
-
-        storageRecyclerAdapter = new StorageRecyclerAdapter(mContext,mStorageItems);
-        storageRecyclerView.setAdapter(storageRecyclerAdapter);
     }
 }

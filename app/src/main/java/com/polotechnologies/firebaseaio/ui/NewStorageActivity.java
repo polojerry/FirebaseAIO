@@ -144,11 +144,10 @@ public class NewStorageActivity extends AppCompatActivity {
 
         String mDownloadUrl;
         FirebaseUser mCurrentUser = mAuth.getCurrentUser();
-        String userId = mCurrentUser.getUid();
 
         String id = mDatabaseReference.push().getKey();
 
-        final StorageReference storageReference = mStorageReference.child("storageImages/" + userId + "/" + id + ".png");
+        final StorageReference storageReference = mStorageReference.child("storageImages/" + id + ".png");
         storageReference.putFile(fullPhotoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -177,7 +176,8 @@ public class NewStorageActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewStorageActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                storageProgressBar.setVisibility(View.GONE);
+                Toast.makeText(NewStorageActivity.this, "Failed to Upload Image" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -197,7 +197,8 @@ public class NewStorageActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewStorageActivity.this, "Failed to Upload Image", Toast.LENGTH_SHORT).show();
+                storageProgressBar.setVisibility(View.GONE);
+                Toast.makeText(NewStorageActivity.this, "Failed to Upload Image" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.NewFireStoreActivity"></activity>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashScreenTheme">
@@ -24,7 +25,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.NewStorageActivity" />
-        <activity android:name=".ui.NewRealtimeActivity"></activity>
+        <activity android:name=".ui.NewRealtimeActivity" />
     </application>
 
 </manifest>

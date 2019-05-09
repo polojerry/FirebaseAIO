@@ -144,11 +144,10 @@ public class NewRealtimeActivity extends AppCompatActivity {
 
         String mDownloadUrl;
         FirebaseUser mCurrentUser = mAuth.getCurrentUser();
-        String userId = mCurrentUser.getUid();
 
         String id = mDatabaseReference.push().getKey();
 
-        final StorageReference storageReference = mStorageReference.child("realTimeImages/" + userId + "/" + id + ".png");
+        final StorageReference storageReference = mStorageReference.child("realTimeImages/" + id + ".png");
         storageReference.putFile(fullPhotoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.polotechnologies.firebaseaio.R;
 import com.polotechnologies.firebaseaio.adapters.RealtimeRecyclerAdapter;
@@ -38,7 +39,9 @@ public class RealtimeFragment extends Fragment {
     RecyclerView realtimeRecyclerView;
     RealtimeRecyclerAdapter realtimeRecyclerAdapter;
     List<RealtimeItems> mRealtimeItems;
+
     DatabaseReference mDatabaseReference;
+    Query query;
 
     FloatingActionButton newRealtime;
 
@@ -66,12 +69,29 @@ public class RealtimeFragment extends Fragment {
         newRealtime = getActivity().findViewById(R.id.fabNewRealTime);
         realtimeRecyclerView = getActivity().findViewById(R.id.realTimeRecycler);
 
+        getActivity().setTitle("Real Time Database");
+
         realtimeRecyclerView.setHasFixedSize(false);
         realtimeRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         mRealtimeItems = new ArrayList<>();
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("FirebaseAIO/realTimeImages");
-        getLatestData();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        getLatestData(new StorageFragment.OnDataReceiveCallback(){
+            @Override
+            public void onDataReceived(DataSnapshot mDataSnapshot) {
+                mRealtimeItems.clear();
+                for (DataSnapshot storedRealtimeDataSnapshot : mDataSnapshot.getChildren()){
+                    RealtimeItems latestRealtimeItems = storedRealtimeDataSnapshot.getValue(RealtimeItems.class);;
+
+                    mRealtimeItems.add(latestRealtimeItems);
+                }
+
+                realtimeRecyclerAdapter = new RealtimeRecyclerAdapter(mContext,mRealtimeItems);
+                realtimeRecyclerView.setAdapter(realtimeRecyclerAdapter);
+            }
+
+        });
 
         newRealtime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,23 +103,18 @@ public class RealtimeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        getLatestData();
+    public interface OnDataReceiveCallback {
+        void onDataReceived(DataSnapshot mDataSnapshot);
     }
 
-    public void getLatestData(){
 
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+    private void getLatestData(final StorageFragment.OnDataReceiveCallback callback) {
+
+        query = mDatabaseReference.child("FirebaseAIO/realTimeImages");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mRealtimeItems.clear();
-                for (DataSnapshot realTimeDataSnapshot : dataSnapshot.getChildren()){
-                    RealtimeItems latestRealtimeItems = realTimeDataSnapshot.getValue(RealtimeItems.class);
-
-                    mRealtimeItems.add(latestRealtimeItems);
-                }
+                callback.onDataReceived(dataSnapshot);
             }
 
             @Override
@@ -107,10 +122,6 @@ public class RealtimeFragment extends Fragment {
 
             }
         });
-
-        realtimeRecyclerAdapter = new RealtimeRecyclerAdapter(mContext,mRealtimeItems);
-        realtimeRecyclerView.setAdapter(realtimeRecyclerAdapter);
-
     }
 
 }

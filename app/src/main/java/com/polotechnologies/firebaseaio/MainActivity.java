@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.polotechnologies.firebaseaio.fragments.FirecastFragment;
+import com.polotechnologies.firebaseaio.fragments.FirestoreFragment;
 import com.polotechnologies.firebaseaio.fragments.RealtimeFragment;
 import com.polotechnologies.firebaseaio.fragments.StorageFragment;
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Fragment fragment = null;
         switch (menuItem.getItemId()){
             case R.id.actionFirecast:
-                fragment = new FirecastFragment();
+                fragment = new FirestoreFragment();
                 break;
             case R.id.actionRealtime:
                 fragment = new RealtimeFragment();
