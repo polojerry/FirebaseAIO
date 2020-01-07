@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment fragment = null;
         switch (menuItem.getItemId()){
-            case R.id.actionFirecast:
+            case R.id.actionFirestore:
                 fragment = new FirestoreFragment();
                 break;
             case R.id.actionRealtime:

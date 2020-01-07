@@ -13,8 +13,8 @@
         android:title="@string/realtime"
         app:showAsAction="never" />
     <item
-        android:id="@+id/actionFirecast"
+        android:id="@+id/actionFirestore"
         android:icon="@drawable/fire"
-        android:title="@string/firecast"
+        android:title="@string/firestore"
         app:showAsAction="never" />
 </menu>

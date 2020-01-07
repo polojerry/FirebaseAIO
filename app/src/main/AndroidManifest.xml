@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.NewFireStoreActivity"></activity>
+        <activity android:name=".ui.NewFirestoreActivity"></activity>
+        <activity android:name=".ui.NewFireStoreActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashScreenTheme">

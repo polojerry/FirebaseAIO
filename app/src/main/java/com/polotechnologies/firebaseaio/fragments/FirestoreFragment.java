@@ -24,8 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.polotechnologies.firebaseaio.R;
 
-import com.polotechnologies.firebaseaio.data_models.FireStoreItems;
-import com.polotechnologies.firebaseaio.ui.NewFireStoreActivity;
+import com.polotechnologies.firebaseaio.data_models.FirestoreItems;
+import com.polotechnologies.firebaseaio.ui.NewFirestoreActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class FirestoreFragment extends Fragment {
 
     RecyclerView fireStoreRecyclerView;
 
-    List<FireStoreItems> mFireStoreItems;
+    List<FirestoreItems> mFireStoreItems;
 
     FirebaseFirestore mFirebaseFirestore;
     Query query;
@@ -69,7 +69,7 @@ public class FirestoreFragment extends Fragment {
         newFireStore = getActivity().findViewById(R.id.fabNewFireStore);
         fireStoreRecyclerView = getActivity().findViewById(R.id.fireStoreRecycler);
 
-        getActivity().setTitle("Cloud Firestore Database");
+        getActivity().setTitle("Firestore Database");
 
         fireStoreRecyclerView.setHasFixedSize(false);
         fireStoreRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
@@ -81,7 +81,7 @@ public class FirestoreFragment extends Fragment {
         newFireStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startNewFireStoreActivity = new Intent(getActivity(), NewFireStoreActivity.class);
+                Intent startNewFireStoreActivity = new Intent(getActivity(), NewFirestoreActivity.class);
                 startActivity(startNewFireStoreActivity);
             }
         });
@@ -92,14 +92,14 @@ public class FirestoreFragment extends Fragment {
 
         query = FirebaseFirestore.getInstance().collection("cities");
 
-        FirestoreRecyclerOptions<FireStoreItems> options = new FirestoreRecyclerOptions.Builder<FireStoreItems>()
-                .setQuery(query, FireStoreItems.class)
+        FirestoreRecyclerOptions<FirestoreItems> options = new FirestoreRecyclerOptions.Builder<FirestoreItems>()
+                .setQuery(query, FirestoreItems.class)
                 .build();
 
 
-        adapter = new FirestoreRecyclerAdapter<FireStoreItems, FireStoreHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<FirestoreItems, FireStoreHolder>(options) {
             @Override
-            public void onBindViewHolder(FireStoreHolder holder, int position, FireStoreItems model) {
+            public void onBindViewHolder(FireStoreHolder holder, int position, FirestoreItems model) {
 
                 Glide.with(mContext)
                         .load(model.getFirestoreImageUrl())
@@ -113,7 +113,7 @@ public class FirestoreFragment extends Fragment {
                 // Create a new instance of the ViewHolder, in this case we are using a custom
                 // layout called R.layout.message for each item
                 View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.card_firestore_item, group, false);
+                        .inflate(R.layout.card_fire_store_item, group, false);
 
                 return new FireStoreHolder(view);
             }
@@ -133,7 +133,7 @@ public class FirestoreFragment extends Fragment {
 
         public FireStoreHolder(@NonNull View itemView) {
             super(itemView);
-            fireStoreMainImageName = itemView.findViewById(R.id.fireStoreName);
+            fireStoreMainImageName = itemView.findViewById(R.id.fireStoreImageName);
             fireStoreMainImage = itemView.findViewById(R.id.fireStoreImage);
             //fireStoreMainImageTime = itemView.findViewById(R.id.firestoreTime);
 

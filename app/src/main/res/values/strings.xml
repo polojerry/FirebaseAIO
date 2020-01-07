@@ -9,4 +9,5 @@
     <string name="hint_image_name">Image Name</string>
     <string name="button_upload">Upload</string>
     <string name="image_description">Image Place Holder</string>
+    <string name="firestore">Firestore</string>
 </resources>
